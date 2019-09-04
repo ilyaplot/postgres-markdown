@@ -1,0 +1,49 @@
+{
+  "name": "postgres-markdown",
+  "version": "1.0.0",
+  "description": "Builds Slate compatible markdown from a Postgres connection",
+  "author": "Ilya Plotnikov (ilyaplot@gmail.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilyaplot/postgres-markdown.git"
+  },
+  "keywords": [
+    "shins",
+    "slate",
+    "swagger",
+    "openapi",
+    "api",
+    "documentation",
+    "docs",
+    "cli"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilyaplot/postgres-markdown/issues"
+  },
+  "homepage": "https://github.com/ilyaplot/postgres-markdown#readme",
+  "main": "./lib/src/postgres-markdown",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "debug": "^3.2.6",
+    "i18n-2": "^0.7.3",
+    "json2md": "^1.6.3",
+    "pg": "^7.12.1",
+    "pg-structure": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.20",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-plugin-import": "^2.18.2",
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "build": "tsc --pretty",
+    "lint": "eslint src/**/*.js",
+    "prepublish": "rm -rf ./lib && yarn build"
+  },
+  "bin": {
+    "make-postgres-markdown": "./lib/src/postgres-markdown.js"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+    "allowJs": true,
+    "checkJs": false,
+    "module": "commonjs",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+    "resolveJsonModule": true,
+    "rootDir": "./"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
