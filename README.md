@@ -3,7 +3,7 @@
 
 ## Usage:
 ```
-Usage: make-postgres-markdown [options]
+Usage: postgres-markdown [options]
 
 
   Options:
