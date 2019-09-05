@@ -1,4 +1,4 @@
-# Make Postgres Markdown
+# Postgres Markdown
 > Builds Slate compatible markdown from a Postgres connection
 
 ## Usage:
