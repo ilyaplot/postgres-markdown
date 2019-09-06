@@ -44,6 +44,6 @@
     "prepublish": "rm -rf ./lib && yarn build"
   },
   "bin": {
-    "make-postgres-markdown": "./lib/src/postgres-markdown.js"
+    "postgres-markdown": "./lib/src/postgres-markdown.js"
   }
 }
