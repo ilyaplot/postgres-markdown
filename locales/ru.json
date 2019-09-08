@@ -1,0 +1,16 @@
+{
+  "Database Documentation": "Database Documentation",
+  "Created at": "Создано",
+  "Server version": "Версия сервера",
+  "Schema": "Схема",
+  "Tables": "Таблицы",
+  "Inherited tables": "Дочерние таблицы",
+  "column": "колонка",
+  "comment": "комментарий",
+  "type": "тип",
+  "length": "длина",
+  "default": "по-умолчанию",
+  "constraints": "ограничения",
+  "values": "значения",
+  "inherits from": "наследовано от"
+}

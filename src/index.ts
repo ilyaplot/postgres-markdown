@@ -10,7 +10,7 @@ const debug = new Debug('make-postgres-markdown')
 
 const i18n = new (require('i18n-2'))({
     locales: ['en', 'ru'],
-    directory: __dirname + '/../locales',
+    directory: __dirname + '/../../locales',
     extension: '.json'
 })
 

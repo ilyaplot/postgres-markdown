@@ -1,0 +1,16 @@
+{
+  "Database Documentation": "Database Documentation",
+  "Created at": "Created at",
+  "Server version": "Server version",
+  "Schema": "Schema",
+  "Tables": "Tables",
+  "Inherited tables": "Inherited tables",
+  "column": "column",
+  "comment": "comment",
+  "type": "type",
+  "length": "length",
+  "default": "default",
+  "constraints": "constraints",
+  "values": "values",
+  "inherits from": "inherits from"
+}
