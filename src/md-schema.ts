@@ -2,6 +2,7 @@
 
 import {Schema as PgSchema, Table as PgTable} from 'pg-structure'
 import {Client} from 'pg'
+import Inherits from "./Inherits";
 
 const i18n = new (require('i18n-2'))({
     locales: ['en', 'ru'],
@@ -10,13 +11,13 @@ const i18n = new (require('i18n-2'))({
 })
 
 export default class MdSchema {
-    private pgSchema: PgSchema
-    private client: Client
-    private i18n: any
+    private readonly pgSchema: PgSchema
+    private readonly inheritsColumns: Array<Inherits>
+    private readonly i18n: any
 
-    public constructor(pgSchema: PgSchema, i18n) {
+    public constructor(pgSchema: PgSchema, inheritsColumns: Array<Inherits>, i18n) {
         this.pgSchema = pgSchema
-        this.client = new Client()
+        this.inheritsColumns = inheritsColumns
         this.i18n = i18n
     }
 
@@ -45,13 +46,25 @@ export default class MdSchema {
             })
         }
 
+        let inheritedTables: Array<Inherits> = this.inheritsColumns.filter((inherits: Inherits) => inherits.findParentTableKey === pgTable.fullName)
+        if (inheritedTables.length > 0) {
+            md.push({
+                p: `${this.i18n.__('Inherited tables')}:`
+            })
+            md.push({
+                ul: inheritedTables
+                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey})`)
+                    .filter((value, index, self) => self.indexOf(value) === index)
+            })
+        }
+
         const headers = ([
             'column',
             'comment',
             'type',
             'length',
             'default',
-            //'constraints',
+            'constraints',
             'values'
         ]).map(h => this.i18n.__(h));
 
@@ -66,13 +79,34 @@ export default class MdSchema {
                 name = '**' + name + '** _(pk)_'
             }
 
+            let inherits: Inherits;
+
+            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.'))
+            if (inheritsIndex !== -1) {
+                inherits = this.inheritsColumns[inheritsIndex]
+                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey})*`
+            }
+
+            let columnComment = column.comment || ''
+
+            if (!columnComment.length && inherits) {
+                columnComment = inherits.column_parent_description || ''
+            }
+
+            let columnType = column.type || ''
+
+            if (columnType === 'array') {
+                columnType = column.arrayType + `[]`
+                //console.log('column.arrayDimension', column.type, column.arrayType)
+            }
+
             markdownTable.rows.push([
                 name || '',
-                this.escapeInlineDescription(column.comment),
-                column.type || '',
+                this.escapeInlineDescription(columnComment),
+                columnType || '',
                 column.length || '',
-                column.default || '',
-                //renderConstraints(column) || '',
+                column.defaultWithTypeCast  || '',
+                this.renderConstraints(column) || '',
                 column.enumValues ? column.enumValues.join(', ') : ''
             ])
         }
@@ -87,5 +121,21 @@ export default class MdSchema {
             return ''
         }
         return description.replace(/\r?\n/g, ' ').replace(/\s+/, ' ')
+    }
+
+    private renderConstraints(column) {
+        const constraints = []
+
+        if (!column.allowNull) {
+            constraints.push('NOT NULL')
+        }
+
+        for (let [constraintName, constraint] of column.foreignKeyConstraints) {
+            for (let [name, column] of constraint.columns) {
+                constraints.push(`[${name}](#${constraint.referencedTable.name})`)
+            }
+        }
+
+        return constraints.length && constraints.join(', ')
     }
 }

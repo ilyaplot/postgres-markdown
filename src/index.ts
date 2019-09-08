@@ -4,6 +4,7 @@ import * as json2md from 'json2md'
 import * as pgStructure from 'pg-structure'
 import {Client} from 'pg'
 import MdSchema from "./md-schema";
+import Inherits from "./Inherits";
 
 const debug = new Debug('make-postgres-markdown')
 
@@ -37,7 +38,26 @@ export default async function makeMarkdown(options) {
     const serverVersion = await client.query(`SELECT version()`)
         .catch(err => console.error(err))
 
+    sql = `SELECT nmsp_parent.nspname   AS parent_schema,
+                  parent.relname        AS parent_table,
+                  nmsp_child.nspname    AS child_schema,
+                  child.relname         AS child_table,
+                  column_parent.attname AS column_parent_name,
+                  pgd.description       AS column_parent_description
+           FROM pg_inherits
+                    JOIN pg_class parent ON pg_inherits.inhparent = parent.oid
+                    JOIN pg_class child ON pg_inherits.inhrelid = child.oid
+                    JOIN pg_namespace nmsp_parent ON nmsp_parent.oid = parent.relnamespace
+                    JOIN pg_namespace nmsp_child ON nmsp_child.oid = child.relnamespace
+                    JOIN pg_attribute column_parent ON column_parent.attrelid = parent.oid
+                    JOIN pg_catalog.pg_description pgd on (pgd.objoid = parent.oid)
+           WHERE column_parent.attnum > 0
+             AND column_parent.attname NOT ILIKE '%pg.dropped%';`;
 
+    const inherits = await client.query(sql)
+        .catch(err => console.error(err))
+
+    const inheritsColumns = inherits.rows.map((row) => new Inherits(row))
     /**
      * @todo
      */
@@ -45,7 +65,7 @@ export default async function makeMarkdown(options) {
     client.end()
 
     debug('Building JSON representation from pg-structure...')
-console.log(serverVersion.rows[0].version)
+
     let markdownArray = [
         `---`,
         {h1: i18n.__('Database Documentation')},
@@ -56,10 +76,10 @@ console.log(serverVersion.rows[0].version)
 
     for (let schema of schemas.rows) {
         const pgSchema = db.schemas.get(schema.name)
-        const mgSchema = new MdSchema(pgSchema, i18n)
+        const mgSchema = new MdSchema(pgSchema, inheritsColumns, i18n)
         markdownArray = markdownArray.concat(mgSchema.getMarkdownArray())
     }
-    console.log('markdownArray', markdownArray)
+
     const output = json2md(markdownArray)
 
     debug('Writing output')
