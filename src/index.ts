@@ -19,11 +19,8 @@ export default async function makeMarkdown(options) {
     console.time('make-postgres-markdown')
     debug('Parsing schema')
 
-    const db = await pgStructure(options, [options.schema])
-        .catch(err => console.error(err))
-
     const client = new Client(options)
-    client.connect()
+    client.connect().catch((err) => console.error(err))
 
     let sql = `select s.nspname as name
                from pg_catalog.pg_namespace s
@@ -58,11 +55,11 @@ export default async function makeMarkdown(options) {
         .catch(err => console.error(err))
 
     const inheritsColumns = inherits.rows.map((row) => new Inherits(row))
-    /**
-     * @todo
-     */
 
     client.end()
+
+    const db = await pgStructure(options, schemas.rows.map((schema) => schema.name))
+        .catch(err => console.error(err))
 
     debug('Building JSON representation from pg-structure...')
 
@@ -74,10 +71,11 @@ export default async function makeMarkdown(options) {
         `${i18n.__('Server version')}: ${serverVersion.rows[0].version}`,
     ]
 
+
     for (let schema of schemas.rows) {
-        const pgSchema = db.schemas.get(schema.name)
-        const mgSchema = new MdSchema(pgSchema, inheritsColumns, i18n)
-        markdownArray = markdownArray.concat(mgSchema.getMarkdownArray())
+        let pgSchema = db.schemas.get(schema.name)
+        let mdSchema = new MdSchema(pgSchema, inheritsColumns, i18n)
+        markdownArray = markdownArray.concat(mdSchema.getMarkdownArray())
     }
 
     const output = json2md(markdownArray)

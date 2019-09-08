@@ -1,14 +1,7 @@
 'use strict'
 
 import {Schema as PgSchema, Table as PgTable} from 'pg-structure'
-import {Client} from 'pg'
 import Inherits from "./Inherits";
-
-const i18n = new (require('i18n-2'))({
-    locales: ['en', 'ru'],
-    directory: __dirname + '/../locales',
-    extension: '.json'
-})
 
 export default class MdSchema {
     private readonly pgSchema: PgSchema
