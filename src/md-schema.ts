@@ -87,10 +87,13 @@ export default class MdSchema {
             }
 
             let columnType = column.type || ''
-
-            if (columnType === 'array') {
-                columnType = column.arrayType + `[]`
-                //console.log('column.arrayDimension', column.type, column.arrayType)
+            switch (columnType) {
+                case 'user-defined':
+                    columnType = column.userDefinedType
+                    break;
+                case 'array':
+                    columnType = column.arrayType + `[]`
+                    break;
             }
 
             markdownTable.rows.push([
@@ -98,7 +101,7 @@ export default class MdSchema {
                 this.escapeInlineDescription(columnComment),
                 columnType || '',
                 column.length || '',
-                column.defaultWithTypeCast  || '',
+                column.defaultWithTypeCast || '',
                 this.renderConstraints(column) || '',
                 column.enumValues ? column.enumValues.join(', ') : ''
             ])

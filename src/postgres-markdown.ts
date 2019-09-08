@@ -12,8 +12,8 @@ program
     .option('-W, --password [password]', 'Password')
     .option('-d, --database [database]', 'Database', 'postgres')
     .option('-s, --schema [schema]', 'Schema', 'public')
-    .option('-o, --output [output]', 'Output file name', 'index.md')
-    .option('-l, --locale [locale]', 'Locale', 'en')
+    .option('-o, --output [output]', 'Output file name', 'EXAMPLE.md')
+    .option('-l, --locale [locale]', 'Locale', 'ru')
     .option('-i, --ignore <ignore>', 'Pattern of objects to ignore')
     .parse(process.argv)
 
