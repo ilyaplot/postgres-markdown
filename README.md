@@ -1,6 +1,12 @@
 # Postgres Markdown
 > Builds Slate compatible markdown from a Postgres connection
 
+## Installation:
+```
+npm install -g postgres-markdown
+```
+
+
 ## Usage:
 ```
 Usage: postgres-markdown [options]
