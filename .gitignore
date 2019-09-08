@@ -1,6 +1,7 @@
 .DS_Store
 .idea/
 lib/
+!lib/locales/
 node_modules/
 *.log
 public
