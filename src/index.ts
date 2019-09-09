@@ -83,12 +83,6 @@ export default async function makeMarkdown(options) {
 
     debug('Writing output')
 
-    if (options.format === 'html') {
-        /**
-         * @todo HTML output
-         */
-    }
-
     fs.writeFileSync(options.output, output)
 
 
