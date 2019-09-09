@@ -11,6 +11,7 @@ program
     .option('-u, --user [user]', 'User', 'postgres')
     .option('-W, --password [password]', 'Password')
     .option('-d, --database [database]', 'Database', 'postgres')
+    .option('-f, --format [format]', 'Output format (markdown| html)', 'html')
     .option('-o, --output [output]', 'Output file name', 'index.md')
     .option('-l, --locale [locale]', 'Locale', 'ru')
     .option('-i, --ignore <ignore>', 'Pattern of objects to ignore')

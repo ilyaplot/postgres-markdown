@@ -128,7 +128,7 @@ export default class MdSchema {
 
         for (let [constraintName, constraint] of column.foreignKeyConstraints) {
             for (let [name, column] of constraint.columns) {
-                constraints.push(`[${name}](#${constraint.referencedTable.name})`)
+                constraints.push(`[${name}](#${constraint.referencedTable.fullName})`)
             }
         }
 

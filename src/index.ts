@@ -1,10 +1,11 @@
 import * as Debug from 'debug'
-import {writeFileSync} from 'fs'
 import * as json2md from 'json2md'
 import * as pgStructure from 'pg-structure'
 import {Client} from 'pg'
 import MdSchema from "./md-schema";
 import Inherits from "./Inherits";
+
+const fs = require("fs")
 
 const debug = new Debug('make-postgres-markdown')
 
@@ -78,10 +79,18 @@ export default async function makeMarkdown(options) {
         markdownArray = markdownArray.concat(mdSchema.getMarkdownArray())
     }
 
-    const output = json2md(markdownArray)
+    let output = json2md(markdownArray)
 
     debug('Writing output')
-    writeFileSync(options.output, output)
+
+    if (options.format === 'html') {
+        /**
+         * @todo HTML output
+         */
+    }
+
+    fs.writeFileSync(options.output, output)
+
 
     debug('Finished')
     console.timeEnd('make-postgres-markdown')
