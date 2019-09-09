@@ -65,9 +65,7 @@ export default async function makeMarkdown(options) {
     debug('Building JSON representation from pg-structure...')
 
     let markdownArray = [
-        `---`,
         {h1: i18n.__('Database Documentation')},
-        `---`,
         `${i18n.__('Created at')}: ` + (new Date()).toISOString(),
         `${i18n.__('Server version')}: ${serverVersion.rows[0].version}`,
     ]

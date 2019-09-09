@@ -1,5 +1,5 @@
 # Postgres Markdown
-> Builds Slate compatible markdown from a Postgres connection
+> Builds markdown from a Postgres connection
 
 ## Installation:
 ```
@@ -64,10 +64,8 @@ NEW - новый, CLOSED - закрытый
 
 ## Example output:
 
----
 # Database Documentation
 
----
 Created at: 2019-09-08T14:32:51.401Z
 Server version: PostgreSQL 10.10, compiled by Visual C++ build 1800, 64-bit
 ## Schema: users
