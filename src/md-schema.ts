@@ -83,7 +83,7 @@ export default class MdSchema {
             let columnComment = column.comment || ''
 
             if (!columnComment.length && inherits) {
-                columnComment = inherits.column_parent_description || ''
+                //columnComment = inherits.column_parent_description || ''
             }
 
             let columnType = column.type || ''
