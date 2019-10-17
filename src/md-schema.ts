@@ -46,7 +46,7 @@ export default class MdSchema {
             })
             md.push({
                 ul: inheritedTables
-                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey})`)
+                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey.replace('.', '-')})`)
                     .filter((value, index, self) => self.indexOf(value) === index)
             })
         }
