@@ -66,7 +66,11 @@ export default class MdSchema {
             rows: []
         }
 
+
+
         for (let [name, column] of pgTable.columns) {
+
+            var originalName = name;
 
             if (column.isPrimaryKey) {
                 name = '**' + name + '** _(pk)_'
@@ -74,16 +78,16 @@ export default class MdSchema {
 
             let inherits: Inherits;
 
-            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.'))
+            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.').replace('.', '-'))
             if (inheritsIndex !== -1) {
                 inherits = this.inheritsColumns[inheritsIndex]
-                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey})*`
+                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey.replace('.', '-')})*`
             }
 
             let columnComment = column.comment || ''
 
-            if (!columnComment.length && inherits) {
-                //columnComment = inherits.column_parent_description || ''
+            if (!columnComment.length && inherits && inherits.column_parent_name == originalName) {
+                columnComment = inherits.column_parent_description || ''
             }
 
             let columnType = column.type || ''
@@ -128,7 +132,7 @@ export default class MdSchema {
 
         for (let [constraintName, constraint] of column.foreignKeyConstraints) {
             for (let [name, column] of constraint.columns) {
-                constraints.push(`[${name}](#${constraint.referencedTable.fullName})`)
+                constraints.push(`[${name}](#${constraint.referencedTable.fullName.replace('.', '-')})`)
             }
         }
 
