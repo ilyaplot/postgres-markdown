@@ -1,6 +1,6 @@
 {
   "name": "postgres-markdown",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Builds Slate compatible markdown from a Postgres connection",
   "author": "Ilya Plotnikov (ilyaplot@gmail.com)",
   "repository": {
@@ -27,7 +27,7 @@
     "commander": "^2.20.0",
     "debug": "^3.2.6",
     "i18n-2": "^0.7.3",
-    "json2md": "^1.6.3",
+    "json2md": "^1.6.5",
     "pg": "^7.12.1",
     "pg-structure": "^4.2.2"
   },
