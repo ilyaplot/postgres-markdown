@@ -112,6 +112,7 @@ export default class MdSchema {
             ])
         }
 
+
         md.push({table: markdownTable})
 
         return md
