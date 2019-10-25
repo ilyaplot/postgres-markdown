@@ -62,6 +62,7 @@ export default class MdSchema {
         ]).map(h => this.i18n.__(h));
 
         const markdownTable = {
+            outer_bars: false,
             headers,
             rows: []
         }
