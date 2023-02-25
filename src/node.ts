@@ -1,6 +1,5 @@
 import * as Debug from 'debug'
 import * as json2md from 'json2md'
-import pgStructure from "pg-structure";
 import {Client} from 'pg'
 import MdSchema from "./md-schema";
 import Inherits from "./Inherits";
@@ -74,6 +73,8 @@ export default async function makeMarkdown(options) {
     const inheritsColumns = inherits.rows.map((row) => new Inherits(row))
 
     client.end()
+
+    const pgStructure = require('pg-structure');
 
     const db = await pgStructure(dbOptions, {includeSchemas: schemas.rows.map((schema) => schema.name)})
         .catch(err => console.error(err))
