@@ -133,7 +133,7 @@ export default class MdSchema {
         }
 
         column.parent.constraints.forEach((constraint) => {
-            constraints.push(`[${constraint.name}](#${constraint.table.schema.name}__${constraint.table.name})`)
+            constraints.push(`[${constraint.name}](#${constraint.table.schema.name}${constraint.table.name})`)
         });
 
         return constraints.length && constraints.join(', ')
