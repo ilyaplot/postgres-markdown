@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as program from 'commander'
 
-import makeMarkdown from './index'
+import makeMarkdown from './node'
 import {version} from '../package.json'
 
 program

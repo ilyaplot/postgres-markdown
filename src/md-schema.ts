@@ -1,7 +1,10 @@
 'use strict'
 
-import {Schema as PgSchema, Table as PgTable} from 'pg-structure'
+import * as Debug from 'debug'
+import {Schema as PgSchema, Table as PgTable, EnumType} from 'pg-structure'
 import Inherits from "./Inherits";
+
+const debug = new Debug('postgres-markdown')
 
 export default class MdSchema {
     private readonly pgSchema: PgSchema
@@ -20,9 +23,9 @@ export default class MdSchema {
             {h3: this.i18n.__('Tables')}
         ]
 
-        for (let [name, table] of this.pgSchema.tables) {
+        this.pgSchema.tables.forEach((table) => {
             md = md.concat(this.genTable(table))
-        }
+        })
 
         return md;
     }
@@ -31,10 +34,10 @@ export default class MdSchema {
         let md = [];
         md.push({h4: pgTable.fullName})
 
-        if (pgTable.description) {
+        if (pgTable.comment) {
             md.push({
                 code: {
-                    content: pgTable.description
+                    content: pgTable.comment
                 }
             })
         }
@@ -67,11 +70,9 @@ export default class MdSchema {
             rows: []
         }
 
-
-
-        for (let [name, column] of pgTable.columns) {
-
-            var originalName = name;
+        pgTable.columns.forEach((column) => {
+            let name = column.name
+            const originalName = name
 
             if (column.isPrimaryKey) {
                 name = '**' + name + '** _(pk)_'
@@ -91,14 +92,14 @@ export default class MdSchema {
                 columnComment = inherits.column_parent_description || ''
             }
 
-            let columnType = column.type || ''
-            switch (columnType) {
-                case 'user-defined':
-                    columnType = column.userDefinedType
-                    break;
-                case 'array':
-                    columnType = column.arrayType + `[]`
-                    break;
+            let columnType = column.type.name || ''
+
+            if (column.type instanceof EnumType) {
+                columnType = column.type.schema.name + '.' + columnType
+            }
+
+            if (column.arrayDimension || 0 > 0) {
+                columnType += '[]'
             }
 
             markdownTable.rows.push([
@@ -108,10 +109,9 @@ export default class MdSchema {
                 column.length || '',
                 column.defaultWithTypeCast || '',
                 this.renderConstraints(column) || '',
-                column.enumValues ? column.enumValues.join(', ') : ''
+                // column.type.values ? column.type.values.join(', ') : ''
             ])
-        }
-
+        })
 
         md.push({table: markdownTable})
 
@@ -132,11 +132,9 @@ export default class MdSchema {
             constraints.push('NOT NULL')
         }
 
-        for (let [constraintName, constraint] of column.foreignKeyConstraints) {
-            for (let [name, column] of constraint.columns) {
-                constraints.push(`[${name}](#${constraint.referencedTable.fullName.replace('.', '-')})`)
-            }
-        }
+        column.parent.constraints.forEach((constraint) => {
+            constraints.push(`[${constraint.name}](#${constraint.table.schema.name}.${constraint.table.name})`)
+        });
 
         return constraints.length && constraints.join(', ')
     }

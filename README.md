@@ -57,7 +57,7 @@ INHERITS (users."user");
 
 COMMENT ON COLUMN web_users."user".settings IS 'Массив int флагов';
 
-COMMENT ON COLUMN web_users."user".status IS 'Статус кользователя
+COMMENT ON COLUMN web_users."user".status IS 'Статус пользователя
 NEW - новый, CLOSED - закрытый
 
 Статусы указаны для примера';
@@ -97,4 +97,4 @@ column | comment | type | length | default | constraints | values
 **id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL | 
 email *inherits from [users.user](#users.user)* | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL | 
 settings | Массив int флагов | integer[] |  |  |  | 
-status | Статус кользователя NEW - новый, CLOSED - закрытый  Статусы указаны для примера | user-defined |  |  |  | NEW, CLOSED
+status | Статус пользователя NEW - новый, CLOSED - закрытый  Статусы указаны для примера | user-defined |  |  |  | NEW, CLOSED

@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb-base",
   "rules": {
     "arrow-parens": "off",
     "consistent-return": "off",

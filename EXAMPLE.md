@@ -1,9 +1,11 @@
----
 # Database Documentation
 
----
-Created at: 2019-09-08T15:04:34.376Z
-Server version: PostgreSQL 10.10, compiled by Visual C++ build 1800, 64-bit
+Created at: 2023-02-25T19:25:37.521Z
+Server version: PostgreSQL 15.2 (Debian 15.2-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+## Schema: public
+
+### Tables
+
 ## Schema: users
 
 ### Tables
@@ -14,12 +16,12 @@ Server version: PostgreSQL 10.10, compiled by Visual C++ build 1800, 64-bit
 Inherited tables:
 
 
- - [web_users.user](#web_users.user)
+ - [web_users.user](#web_users-user)
 
 column | comment | type | length | default | constraints | values
 --- | --- | --- | --- | --- | --- | ---
-**id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL | 
-email | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL | 
+**id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL, [user_email_key](#users.user), [user_pkey](#users.user)
+email | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL, [user_email_key](#users.user), [user_pkey](#users.user)
 
 ## Schema: web_users
 
@@ -29,7 +31,7 @@ email | Уникальный email пользователя (логин) | chara
 
 column | comment | type | length | default | constraints | values
 --- | --- | --- | --- | --- | --- | ---
-**id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL | 
-email *inherits from [users.user](#users.user)* | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL | 
-settings | Массив int флагов | integer[] |  |  |  | 
-status | Статус кользователя NEW - новый, CLOSED - закрытый  Статусы указаны для примера | web_users.test_enum |  |  |  | NEW, CLOSED
+**id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL, [user_pkey](#web_users.user)
+email |  | character varying | 100 |  | NOT NULL, [user_pkey](#web_users.user)
+settings | Массив int флагов | integer[] |  |  | NOT NULL, [user_pkey](#web_users.user)
+status | Статус кользователя NEW - новый, CLOSED - закрытый  Статусы указаны для примера | web_users.test_enum |  |  | NOT NULL, [user_pkey](#web_users.user)

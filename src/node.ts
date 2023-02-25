@@ -1,6 +1,6 @@
 import * as Debug from 'debug'
 import * as json2md from 'json2md'
-import * as pgStructure from 'pg-structure'
+import pgStructure from "pg-structure";
 import {Client} from 'pg'
 import MdSchema from "./md-schema";
 import Inherits from "./Inherits";
@@ -22,9 +22,17 @@ export default async function makeMarkdown(options) {
 
     i18n.setLocale(options.locale)
 
-    debug('Parsing schema')
+    const dbOptions = {
+        host: options.host,
+        port: options.port,
+        user: options.user,
+        password: options.password,
+        database: options.database,
+    }
 
-    const client = new Client(options)
+    debug('Connecting to database with options: %O', dbOptions)
+
+    const client = new Client(dbOptions)
     client.connect().catch((err) => console.error(err))
 
     let sql = `select s.nspname as name
@@ -34,20 +42,13 @@ export default async function makeMarkdown(options) {
                  and nspname not like 'pg_temp_%'
                order by name`
 
-    debug('Getting schemas')
+    const schemas = await client.query(sql).catch(err => console.error(err))
 
-    let schemas;
+    debug('Schemas: %O', schemas.rows);
 
-    try {
-        schemas = await client.query(sql)
-    } catch (err) {
-        console.error(err)
-    }
+    const serverVersion = await client.query(`SELECT version()`).catch(err => console.error(err))
 
-    debug('Getting server version')
-
-    const serverVersion = await client.query(`SELECT version()`)
-        .catch(err => console.error(err))
+    debug('Server version: %O', serverVersion.rows[0].version);
 
     sql = `SELECT nmsp_parent.nspname   AS parent_schema,
                   parent.relname        AS parent_table,
@@ -68,11 +69,13 @@ export default async function makeMarkdown(options) {
     const inherits = await client.query(sql)
         .catch(err => console.error(err))
 
+    debug('Inherits: %O', inherits.rows);
+
     const inheritsColumns = inherits.rows.map((row) => new Inherits(row))
 
     client.end()
 
-    const db = await pgStructure(options, schemas.rows.map((schema) => schema.name))
+    const db = await pgStructure(dbOptions, {includeSchemas: schemas.rows.map((schema) => schema.name)})
         .catch(err => console.error(err))
 
     debug('Building JSON representation from pg-structure...')
@@ -83,14 +86,15 @@ export default async function makeMarkdown(options) {
         `${i18n.__('Server version')}: ${serverVersion.rows[0].version}`,
     ]
 
-
     for (let schema of schemas.rows) {
         let pgSchema = db.schemas.get(schema.name)
         let mdSchema = new MdSchema(pgSchema, inheritsColumns, i18n)
         markdownArray = markdownArray.concat(mdSchema.getMarkdownArray())
     }
 
-    let output = json2md(markdownArray)
+    debug('JSON representation: %O', markdownArray)
+
+    const output = json2md(markdownArray)
 
     debug('Writing output')
 
