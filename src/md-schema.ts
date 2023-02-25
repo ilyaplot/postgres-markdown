@@ -49,7 +49,7 @@ export default class MdSchema {
             })
             md.push({
                 ul: inheritedTables
-                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey.replace('.', '-')})`)
+                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey.replace('.', '__')})`)
                     .filter((value, index, self) => self.indexOf(value) === index)
             })
         }
@@ -80,10 +80,10 @@ export default class MdSchema {
 
             let inherits: Inherits;
 
-            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.').replace('.', '-'))
+            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.').replace('.', '__'))
             if (inheritsIndex !== -1) {
                 inherits = this.inheritsColumns[inheritsIndex]
-                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey.replace('.', '-')})*`
+                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey.replace('.', '__')})*`
             }
 
             let columnComment = column.comment || ''
@@ -133,7 +133,7 @@ export default class MdSchema {
         }
 
         column.parent.constraints.forEach((constraint) => {
-            constraints.push(`[${constraint.name}](#${constraint.table.schema.name}.${constraint.table.name})`)
+            constraints.push(`[${constraint.name}](#${constraint.table.schema.name}__${constraint.table.name})`)
         });
 
         return constraints.length && constraints.join(', ')
