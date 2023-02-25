@@ -1,6 +1,6 @@
 # Database Documentation
 
-Создано: 2023-02-25T20:14:14.355Z
+Создано: 2023-02-25T20:26:11.294Z
 Версия сервера: PostgreSQL 15.2 (Debian 15.2-1.pgdg110+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
 ## Схема: public
 
@@ -16,7 +16,7 @@
 Дочерние таблицы:
 
 
- - [web_users.user](#web_users__user)
+ - [web_users.user](#web_usersuser)
 
 | колонка | комментарий | тип | длина | по-умолчанию | ограничения | значения |
 | ------- | ----------- | --- | ----- | ------------ | ----------- | -------- |

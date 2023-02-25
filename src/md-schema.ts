@@ -49,7 +49,7 @@ export default class MdSchema {
             })
             md.push({
                 ul: inheritedTables
-                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey.replace('.', '__')})`)
+                    .map((inherits: Inherits) => `[${inherits.findTableKey}](#${inherits.findTableKey.replace('.', '')})`)
                     .filter((value, index, self) => self.indexOf(value) === index)
             })
         }
@@ -80,10 +80,10 @@ export default class MdSchema {
 
             let inherits: Inherits;
 
-            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.').replace('.', '__'))
+            let inheritsIndex = this.inheritsColumns.findIndex((item: Inherits) => item.findColumnKey == [pgTable.fullName, name].join('.').replace('.', ''))
             if (inheritsIndex !== -1) {
                 inherits = this.inheritsColumns[inheritsIndex]
-                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey.replace('.', '__')})*`
+                name += ` *${this.i18n.__('inherits from')} [${inherits.findParentTableKey}](#${inherits.findParentTableKey.replace('.', '')})*`
             }
 
             let columnComment = column.comment || ''
