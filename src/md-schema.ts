@@ -109,7 +109,7 @@ export default class MdSchema {
                 column.length || '',
                 column.defaultWithTypeCast || '',
                 this.renderConstraints(column) || '',
-                // column.type.values ? column.type.values.join(', ') : ''
+                column.type instanceof EnumType ? column.type.values.join(', ') : ''
             ])
         })
 

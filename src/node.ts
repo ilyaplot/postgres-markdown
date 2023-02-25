@@ -1,8 +1,10 @@
+
 import * as Debug from 'debug'
 import * as json2md from 'json2md'
 import {Client} from 'pg'
 import MdSchema from "./md-schema";
 import Inherits from "./Inherits";
+import pgStructure from "pg-structure";
 
 const fs = require("fs")
 
@@ -41,11 +43,11 @@ export default async function makeMarkdown(options) {
                  and nspname not like 'pg_temp_%'
                order by name`
 
-    const schemas = await client.query(sql).catch(err => console.error(err))
+    const schemas = await client.query(sql)
 
     debug('Schemas: %O', schemas.rows);
 
-    const serverVersion = await client.query(`SELECT version()`).catch(err => console.error(err))
+    const serverVersion = await client.query(`SELECT version()`)
 
     debug('Server version: %O', serverVersion.rows[0].version);
 
@@ -66,18 +68,14 @@ export default async function makeMarkdown(options) {
              AND column_parent.attname NOT ILIKE '%pg.dropped%';`;
 
     const inherits = await client.query(sql)
-        .catch(err => console.error(err))
 
     debug('Inherits: %O', inherits.rows);
 
     const inheritsColumns = inherits.rows.map((row) => new Inherits(row))
 
-    client.end()
-
-    const pgStructure = require('pg-structure');
+    await client.end()
 
     const db = await pgStructure(dbOptions, {includeSchemas: schemas.rows.map((schema) => schema.name)})
-        .catch(err => console.error(err))
 
     debug('Building JSON representation from pg-structure...')
 

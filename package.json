@@ -29,7 +29,7 @@
     "i18n-2": "^0.7.3",
     "json2md": "^2.0.0",
     "pg": "^8.9.0",
-    "pg-structure": "^4.2.2"
+    "pg-structure": "^6.2.0"
   },
   "devDependencies": {
     "@types/node": "^11.13.20",
