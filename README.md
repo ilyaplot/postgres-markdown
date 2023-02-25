@@ -79,7 +79,7 @@ Server version: PostgreSQL 10.10, compiled by Visual C++ build 1800, 64-bit
 Inherited tables:
 
 
- - [web_users.user](#web_users.user)
+ - [web_users.user](#web_usersuser)
 
 column | comment | type | length | default | constraints | values
 --- | --- | --- | --- | --- | --- | ---
@@ -95,6 +95,6 @@ email | Уникальный email пользователя (логин) | chara
 column | comment | type | length | default | constraints | values
 --- | --- | --- | --- | --- | --- | ---
 **id** _(pk)_ |  | integer |  | nextval('users.user_id_seq'::regclass) | NOT NULL | 
-email *inherits from [users.user](#users.user)* | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL | 
+email *inherits from [users.user](#usersuser)* | Уникальный email пользователя (логин) | character varying | 100 |  | NOT NULL | 
 settings | Массив int флагов | integer[] |  |  |  | 
 status | Статус пользователя NEW - новый, CLOSED - закрытый  Статусы указаны для примера | user-defined |  |  |  | NEW, CLOSED
