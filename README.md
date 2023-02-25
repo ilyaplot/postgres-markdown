@@ -11,18 +11,19 @@ npm install -g postgres-markdown
 ```
 Usage: postgres-markdown [options]
 
+Options:
+  -V, --version              output the version number
+  -H, --host [host]          Host (default: "127.0.0.1")
+  -p, --port [port]          Port (default: 5432)
+  -u, --user [user]          User (default: "postgres")
+  -W, --password [password]  Password
+  -d, --database [database]  Database (default: "postgres")
+  -o, --output [output]      Output file name (default: "index.md")
+  -l, --locale [locale]      Locale (default: "ru")
+  -i, --ignore <ignore>      Pattern of objects to ignore
+  -v, --verbose              Verbose output
+  -h, --help                 output usage information
 
-  Options:
-
-    -V, --version              output the version number
-    -h, --host [host]          Host
-    -p, --port [port]          Port
-    -d, --database [database]  Database
-    -u, --user [user]          User
-    -W, --password [password]  Password
-    -o, --output [output]      Output file name
-    -l, --locale [locale]      Documentation language (en|ru)
-    -h, --help                 output usage information
 ```
 
 ## Example DB: 

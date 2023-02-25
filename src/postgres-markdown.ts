@@ -14,6 +14,11 @@ program
     .option('-o, --output [output]', 'Output file name', 'index.md')
     .option('-l, --locale [locale]', 'Locale', 'ru')
     .option('-i, --ignore <ignore>', 'Pattern of objects to ignore')
+    .option('-v, --verbose', 'Verbose output')
     .parse(process.argv)
+
+if (program.verbose) {
+    process.env.DEBUG = '*'
+}
 
 makeMarkdown(program)

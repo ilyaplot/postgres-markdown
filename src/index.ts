@@ -7,7 +7,7 @@ import Inherits from "./Inherits";
 
 const fs = require("fs")
 
-const debug = new Debug('make-postgres-markdown')
+const debug = new Debug('postgres-markdown')
 
 const i18n = new (require('i18n-2'))({
     locales: ['en', 'ru'],
@@ -16,8 +16,12 @@ const i18n = new (require('i18n-2'))({
 })
 
 export default async function makeMarkdown(options) {
+    debug.enabled = options.verbose
+    debug('Verbose mode enabled');
+    console.time('postgres-markdown')
+
     i18n.setLocale(options.locale)
-    console.time('make-postgres-markdown')
+
     debug('Parsing schema')
 
     const client = new Client(options)
@@ -30,8 +34,17 @@ export default async function makeMarkdown(options) {
                  and nspname not like 'pg_temp_%'
                order by name`
 
-    const schemas = await client.query(sql)
-        .catch(err => console.error(err))
+    debug('Getting schemas')
+
+    let schemas;
+
+    try {
+        schemas = await client.query(sql)
+    } catch (err) {
+        console.error(err)
+    }
+
+    debug('Getting server version')
 
     const serverVersion = await client.query(`SELECT version()`)
         .catch(err => console.error(err))
@@ -85,5 +98,5 @@ export default async function makeMarkdown(options) {
 
 
     debug('Finished')
-    console.timeEnd('make-postgres-markdown')
+    console.timeEnd('postgres-markdown')
 }
