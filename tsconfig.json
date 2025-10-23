@@ -8,7 +8,8 @@
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
     "resolveJsonModule": true,
-    "rootDir": "./"
+    "rootDir": "./",
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
