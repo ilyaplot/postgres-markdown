@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "tsc --pretty",
-    "lint": "eslint src/**/*.js",
+    "lint": "npm run build && eslint \"lib/**/*.js\"",
     "prepublish": "rm -rf ./lib/src && yarn build"
   },
   "bin": {
